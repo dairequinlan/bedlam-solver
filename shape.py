@@ -10,8 +10,9 @@ class Axis(Enum):
 
 class Shape:
 
-    def __init__(self, colour, blocks):
+    def __init__(self, colour, name, blocks):
         self.colour = colour
+        self.name = name
         self.blocks = blocks
         self.rotations = []
         self.fill_rotations()
@@ -133,6 +134,11 @@ class Shape:
                     break
             if not present:
                 self.rotations.append(rotation)
+
+    def build(json_config):
+        return Shape(json_config["colour"], 
+                    json_config["name"], 
+                    json_config["blocks"])
 
     def __repr__(self):
         return "%s"%(self.colour)

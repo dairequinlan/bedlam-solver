@@ -1,0 +1,12 @@
+{
+    "shapes":[
+        {"colour":"#f5deb3", "name":"L", "blocks":[[0,0,0],[1,0,0],[0,0,1]]},
+        {"colour":"#8b4513", "name":"L2", "blocks":[[0,0,0],[1,0,0],[0,0,1]]},
+        {"colour":"#0000ff", "name":"I", "blocks":[[0,0,0],[1,0,0]]}
+  
+
+    ],
+    "width":2,
+    "depth":2,
+    "height":2
+}

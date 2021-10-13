@@ -1,0 +1,20 @@
+{
+    "shapes":[
+        {"colour":"#f5deb3", "name":"Dented L", "blocks":[[0,0,0],[1,0,0],[1,0,1],[0,1,0],[0,2,0]]},
+        {"colour":"#8b4513", "name":"Corner Joist", "blocks":[[0,0,0],[1,0,0],[0,0,1],[0,1,0],[0,2,0]]},
+        {"colour":"#0000ff", "name":"Flat M", "blocks":[[0,1,0],[1,0,0],[2,0,0],[1,1,0],[0,2,0]]},
+        {"colour":"#4b0082", "name":"Middle Zig", "blocks":[[0,0,0],[0,1,0],[0,1,1],[1,1,0],[1,2,0]]},
+        {"colour":"#ff0000", "name":"Confused F", "blocks":[[0,0,0],[1,0,0],[1,1,0],[2,1,0],[1,2,0]]},
+        {"colour":"#2f4f4f", "name":"Pokey Z", "blocks":[[0,0,0],[0,0,1],[0,1,0],[1,1,0],[1,2,0]]},
+        {"colour":"#ffff00", "name":"T-Bone", "blocks":[[0,1,0],[1,0,0],[0,1,1],[1,1,0],[1,2,0]]},
+        {"colour":"#00ff00", "name":"Spikey Zag", "blocks":[[0,0,1],[0,1,0],[0,1,1],[1,1,0],[1,2,0]]},
+        {"colour":"#00ffff", "name":"F in Therapy", "blocks":[[0,0,0],[0,0,1],[0,1,0],[1,1,0],[0,2,0]]},
+        {"colour":"#228b22", "name":"Cross", "blocks":[[0,1,0],[1,0,0],[1,1,0],[2,1,0],[1,2,0]]},
+        {"colour":"#ff00ff", "name":"Pokey Corner Bit", "blocks":[[0,0,0],[0,1,0],[1,1,0],[0,1,1],[0,2,0]]},
+        {"colour":"#6495ed", "name":"Little Corner", "blocks":[[0,0,0],[0,0,1],[1,0,0],[1,1,0]]},
+        {"colour":"#ff69b4", "name":"Right Angles Everywhere", "blocks":[[0,0,0],[0,0,1],[0,1,0],[0,2,0],[1,2,0]]}
+    ],
+    "width":4,
+    "height":4,
+    "depth":4
+}
