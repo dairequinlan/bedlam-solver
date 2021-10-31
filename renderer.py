@@ -1,6 +1,7 @@
 from shape import Shape
 from cube import Cube
 from PIL import Image, ImageOps
+import sys
 
 """ This is something I hacked together very
     quickly to provide some way of visually checking
@@ -104,6 +105,14 @@ class Renderer:
                             cubey + (x*22) + (y*22) - (z*58)),
                             mask = self.cube_alpha )
 
+    def find_shape(self, shapes, name):
+        for shape in shapes:
+            if shape.name == name:
+                return shape
+        print("Cannot find shape '%s' in shapes:"%name)
+        print(shapes)
+        sys.exit()
+
     def draw_solution(self, shapes, solved_shapes):
         basex = 100;
         basey = 100;
@@ -112,7 +121,8 @@ class Renderer:
 
         for solution_shape in solved_shapes:
 
-            shape = shapes[solution_shape["shape"]]
+            shape = self.find_shape(shapes, solution_shape["name"])
+
             self.draw_shape(shape, basex, basey, 0)
             framex = basex+200 + 179
             framey = basey-100 + 232

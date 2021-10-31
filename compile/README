@@ -1,0 +1,1 @@
+Run "cmake .." and then "make" from here to ensure that the c-solver is built into the parent directory.

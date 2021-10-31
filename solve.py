@@ -1,10 +1,13 @@
 from operator import itemgetter
 import sys, getopt
+import os
 from shape import Shape
 from cube import Cube
 from renderer import Renderer
 from solver import Solver
 import json
+import jsons
+import subprocess
 
 def load_config(config_filename):
     config_file = open(config_filename,)
@@ -40,33 +43,48 @@ def render_shapes_and_rotations(shapes):
 
 def main(argv):
 
+    C_SOLVER = "c-solver"
     config_filename="bedlam.json"
     do_sanity = False
     num_solutions = 1
+    solver = "c"
 
-    usage = """ solve.py -i <input> -o \n
-               -i is input config, shapes and container dimensions
-               -o to print shapes and rotations on screen and save to PNG
-               -n to set the max number of solutions, default is all"""
+    usage = """solve.py -i <input> [-o] [-n <num solutions>] [-s <c|python>] \n
+               -i <input json file> : input config, shapes and container dimensions
+               -o : print shapes and rotations on screen and save to PNG
+               -n <num> : set the max number of solutions, default is all
+               -s <c|python> : set solver, c-solver used by default"""
     try:
-      opts, args = getopt.getopt(argv,"hi:on:",["input=","out","num="])
-    except getopt.GetoptError:
+      opts, args = getopt.getopt(argv,"hi:on:s:",["input=","out","num="])
+    except getopt.GetoptError as e:
+      print("Error: ",e)
       print(usage)
       sys.exit(2)
 
     for opt, arg in opts:
       if opt == '-h':
-         print(usage)
-         sys.exit()
+        print(usage)
+        sys.exit()
       elif opt in ("-i", "--input"):
-         config_filename = arg
+        config_filename = arg
       elif opt in ("-o", "--out"):
-         do_sanity = True
+        do_sanity = True
       elif opt in ("-n", "--num"):
-          num_solutions = int(arg)
+        num_solutions = int(arg)
+      elif opt in ("-s", "--solver"):
+        solver = arg
+
+    if solver not in (["c","python"]):
+        print(usage)
+        sys.exit()
+    
+    if solver == "c" and not os.access("c-solver",os.X_OK):
+        print("Cannot use 'c' solver, '%s' does not exist or is not executable"%C_SOLVER)
+        sys.exit()
 
     print("Loading %s"%config_filename)
     shapes, x, y, z = load_config(config_filename)
+    print(shapes)
     print("Loaded")
     if do_sanity:
         render_shapes_and_rotations(shapes)
@@ -79,15 +97,33 @@ def main(argv):
     solver_sanity_check = 0
     solved_shapes = []
 
-    solver = Solver(cube, shapes)
-    solver.solve(num_solutions)
 
-    if len(solver.solutions) == 0:
+    shapes_config = {
+        "width":x,
+        "depth":y,
+        "height":z,
+        "shapes":shapes
+    }
+
+    solutions = []
+    if solver == "c":
+        print("Using C++ solver")
+        solver = subprocess.run(["./%s"%C_SOLVER], 
+                        universal_newlines=True, 
+                        input=jsons.dumps(shapes_config), 
+                        stdout=subprocess.PIPE)
+        solutions.append(json.loads(solver.stdout))
+    else:
+        print("Using Python solver")
+        solver = Solver(cube, shapes)
+        solver.solve(num_solutions)
+        solutions = solver.solutions
+    
+    if len(solutions) == 0:
         print("No Solution Found.")
         exit()
-
-    print("Solutions found: %i"%len(solver.solutions))
-
+    
+    print("Solutions found: %i"%len(solutions))
 
     """ get the list of solved shapes from the solver, and sort them
         by z, x, y to give us _some_ kind of sensible order that we
@@ -95,7 +131,7 @@ def main(argv):
         you still have to take a shape out to put the next one in, needs
         a litte more thought """
 
-    for index, solved_shapes in enumerate(solver.solutions):
+    for index, solved_shapes in enumerate(solutions):
         solved_shapes.reverse() #because we initally get them from last->first
         solved_shapes.sort(key=itemgetter("z","x","y"))
         #lets print the solution to the console

@@ -136,11 +136,12 @@ class Shape:
                 self.rotations.append(rotation)
 
     def build(json_config):
+        print("Building from %s"%json_config)
         return Shape(json_config["colour"], 
                     json_config["name"], 
                     json_config["blocks"])
 
     def __repr__(self):
-        return "%s"%(self.colour)
+        return "colour:%s, name:%s"%(self.colour, self.name)
 
     __str__ = __repr__
